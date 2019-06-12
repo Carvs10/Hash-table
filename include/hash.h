@@ -1,4 +1,4 @@
-##ifndef HASH_H
+#ifndef HASH_H
 #define HASH_H
 
 #include <iostream>
@@ -8,6 +8,7 @@
 #include <vector>
 #include <forward_list>
 #include <initializer_list>//std::initializer_list
+#include <math.h>
 
 template 
 < 
