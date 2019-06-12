@@ -1,11 +1,13 @@
-#ifndef HASH_H
+##ifndef HASH_H
 #define HASH_H
 
 #include <iostream>
+#include <memory>
 #include <iterator>
 #include <string>
 #include <vector>
 #include <forward_list>
+#include <initializer_list>//std::initializer_list
 
 template 
 < 
@@ -16,72 +18,70 @@ typename KeyEqual = std::equal_to < KeyType >
 >
 class HashTbl {
 
-	public:
+      public:
 
-		template < class KeyType, class DataType >
-		class HashEntry {
+            template < class KeyType, class DataType >
+            class HashEntry {//! Hash entry class
 
-			public:
+                  public:
 
-				HashEntry ( KeyType k_, DataType d_ ) : m_key( k_ ), m_data( d_ )
-				{/*Empty*/};
+                        HashEntry ( KeyType k_, DataType d_ ) : m_key( k_ ), m_data( d_ )
+                        {/*Empty*/};
 
-				KeyType m_key;   //!< Stores the key for an entry.
-				DataType m_data; //!< Stores the data for an entry.
+                        KeyType m_key;   //!< Stores the key for an entry.
+                        DataType m_data; //!< Stores the data for an entry.
 
-		}
+            }
 
-		using Entry = HashEntry < KeyType, DataType >; //! Alias
+            using Entry = HashEntry < KeyType, DataType >; //! Alias
 
+            //!<Contructors and destructor
 
+            HashTbl ( size_t tbl_size = DEFAULT_SIZE );
 
-        HashTbl( size_t tbl_size = DEFAULT_SIZE );
+            virtual ~HashTbl ();
 
-            virtual ~Hashtbl ();
+            HashTbl ( const Hashtbl& ); //Hashtbl??
 
-            HashTbl (const Hashtbl &);
+            HashTbl ( std::initializer_list < Entry > ilist );
 
-            HashTbl ( std::initializer_list<Entry> ilist );
+            HashTbl& operator= ( const Hashtbl & );
 
-            HashTbl& operator= ( const HashTbl &);
-
-            HashTbl& operator= ( std::initializer_list<Entry> ilist );
+            HashTbl& operator= ( std::initializer_list < Entry > ilist );
 
             bool insert ( const KeyType & k_, const DataType & d_ );
 
-            bool erase( const KeyType & k_ );
+            bool erase ( const KeyType & k_ );
 
-            bool retrive ( const KeyType & k_, DataType & d_ ) const;
+            bool retrieve ( const KeyType & k_, DataType & d_ ) const;
 
-            bool clear ( void );
+            void clear ( void );
 
-            bool empty( void ) const;
+            bool empty ( void ) const;
 
-            size_t size( void ) const ;
+            size_t size ( void ) const;
 
             DataType& at( const KeyType& k_ );
 
-            DataType& operator[]( const KeyType& k_);
+            DataType& operator[] ( const KeyType& k_ );
 
-            size_t count( const KeyType& k_ ) const;
+            size_t count ( const KeyType& k_ ) const;
 
+            friend std::ostream& operator<< ( std::ostream &, const HashTbl& );//stdostream
 
+      private:
 
+            void rehash();                      //! Change Hash table if load factor λ > 1.
 
-            private:
+            unsigned int m_size;          //! Hash table size.
 
-            void rehash(); //!< Change Hash table size if load factor.
+            unsigned int m_count;         //! Number of elements currently stored in the table.
 
-            unsigned int m_size; //!< Hash Table size
-            unsigned int m_count; //!< Number of elements currently stored in the table
-
-            //!< The table: array of pointers to collision list
-            std::forward_list< Entry > * m_data_type;
-
-            //! Hash table's default size: 11 table entries
-            static const short DEFAULT_SIZE = 11;
-
-
+            //!< The table: array of pointers to collision list.
+            std::forward_list< Entry > * m_data_table
+            //std::unique_ptr < std::forward_list< Entry > [] > m_data_table
+            
+            static const short DEFAULT_SIZE = 11;//! Hash table’s default size: 11 table entries.
 
 }
 
