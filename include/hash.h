@@ -45,15 +45,15 @@ class HashTbl {
 
             HashTbl ( size_t tbl_size_ = DEFAULT_SIZE ): m_count { 0 }
             {
-                  m_size = next_prime( tbl_size_ ) ;
-                  m_data_table.resize( next_prime( tbl_size_ ) );
+                m_size = next_prime( tbl_size_ ) ;
+                m_data_table.resize( next_prime( tbl_size_ ) );
 
-                  std::cout<< "Contructor 1\n";
+                std::cout<< "Contructor 1\n";
             }
 
-            virtual ~HashTbl (){
-                delete [] m_data_table;
-            }
+            //virtual ~HashTbl (){
+            //    delete [] m_data_table;
+            //}
 
             //HashTbl ( const Hashtbl& ): 
 
@@ -242,7 +242,7 @@ class HashTbl {
             unsigned int m_count;         //! Number of elements currently stored in the table.
 
             //!< The table: array of pointers to collision list.
-            std::forward_list< Entry > * m_data_table;
+            std::vector <std::forward_list< Entry > >  m_data_table;
             //std::unique_ptr < std::forward_list< Entry > [] > m_data_table
             
             static const short DEFAULT_SIZE = 11;//! Hash table’s default size: 11 table entries.

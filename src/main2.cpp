@@ -10,5 +10,7 @@
 
 int main(){
 
+	HashTbl< int, int > ht;
+
 	return 0;
 }
