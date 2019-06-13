@@ -14,11 +14,11 @@ struct Account{
     float balance;
     int m_balance;
 
-    using AcctKey = std::pair < std::string, int >
+    using AcctKey = std::pair < std::string, int >;
 
 
     // Constructor 
-    Account( std::string name, int code, int agg, int cont, float balance )
+    Account( std::string name, int code, int agg, int cont, float balance)
     : client_name(name), bank_code(code), ag_numb(agg), cont(cont), balance(balance)
     {/* empty */}
 
@@ -58,14 +58,14 @@ struct KeyHash{
  */
 
 struct KeyEqual{
-    bool operator()(const Account::AcctKey& lhs_, const Account::AcctKeys& rhs_) const{
-        return lhs_.first == rhs.first and lhs_.second == rhs_.second;
+    bool operator()(const Account::AcctKey& lhs_, const Account::AcctKey& rhs_) const{
+        return lhs_.first == rhs_.first and lhs_.second == rhs_.second;
     }
 };
 
 /// Operator that checks if the contents of lhs and rhs are equal
 bool operator==(const Account &lhs, const Account &rhs){
-    return lhs.account == rhs.account;
+    return lhs.cont == rhs.cont;
 }
 
 #endif
