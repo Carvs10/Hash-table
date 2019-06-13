@@ -77,9 +77,24 @@ class HashTbl {
              */
             bool insert ( const KeyType & k_, const DataType & d_ ){
                 KeyHash hashFunc;  // "Functor" for primary hash.
-                KeyEqual equalFunc; //
+                KeyEqual equalFunc; // "Functor" for equality
                 Entry new_entry(k_, d_);
                 auto end(hashFunc(k_) % m_size);
+                for(auto it(m_data_table[end].begin()); it != m_data_table[end].end()); it++){
+                    if(true == equalFunc(it-> m_key. new_entry.m_key)){
+                        it->m_data = d_;
+                        m_count += 1;
+                        return false;
+                    }
+
+                    m_count +=1;
+                    if(size()/m_size > 1){
+                        rehash();
+                    }
+                    m_data_table[end].push_front(new_entry);
+                    return true;
+                }
+
 
             }
 
@@ -118,7 +133,7 @@ class HashTbl {
                     m_data_table[i].clear();
                 }
 
-                m_count =0;
+                m_count = 0;
                 m_size = 0;
             }
 
@@ -135,14 +150,7 @@ class HashTbl {
              */
 
             size_t size ( void ) const{
-                size_t size = 0;
-                for(auto i(0u); i < m_size; i++){
-                    for(auto it(m_data_table[i].begin(); it != m_data_table[i].end(); it++){
-                        it++;
-                    }
-                }
-
-                return size;
+                return m_count;
             }
 
             DataType& at( const KeyType& k_ );
