@@ -120,7 +120,19 @@ class HashTbl {
                 return false;
             }
 
-            bool retrieve ( const KeyType & k_, DataType & d_ ) const;
+            bool retrieve ( const KeyType & k_, DataType & d_ ) const{
+                KeyHash hashFunc;
+                KeyEqual equalFunc;
+                auto end(hashFunc(k_) % m_size);
+                for(auto it(m_data_table[end].begin()); it != m_data_table[end].end(); it++ ){
+                    if(true == equalFunc(it->m_key, k_)){
+                        d_ = it->m_data;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
 
             /*!
              * Clear all the memory associated with collision lists from the table.
