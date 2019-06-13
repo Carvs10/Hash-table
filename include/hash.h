@@ -49,16 +49,21 @@ class HashTbl {
 
             //!<Contructors and destructor
 
-            HashTbl ( size_t tbl_size = DEFAULT_SIZE ): m_size { tbl_size }, m_count { 0 }
+            HashTbl ( void ): m_size { DEFAULT_SIZE }, m_count { 0 }
             {
                   m_data_table.resize( DEFAULT_SIZE );
+            }
+
+            HashTbl ( size_t tbl_size ): m_size { next_prime( tbl_size ) }, m_count { 0 }
+            {
+                  m_data_table.resize( next_prime( tbl_size ) );
             }
 
             virtual ~HashTbl (){
                 delete [] m_data_table;
             }
 
-            HashTbl ( const Hashtbl& ); //Hashtbl??
+            HashTbl ( const Hashtbl& ): 
 
             HashTbl ( std::initializer_list < Entry > ilist );
 
