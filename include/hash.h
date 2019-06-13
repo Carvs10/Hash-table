@@ -77,17 +77,63 @@ class HashTbl {
 
             bool retrieve ( const KeyType & k_, DataType & d_ ) const;
 
-            void clear ( void );
+            /*!
+             * Clear all the memory associated with collision lists from the table.
+             * remove its elements
+             */
 
-            bool empty ( void ) const;
+            void clear ( void ){
 
-            size_t size ( void ) const;
+                for(auto i(0u); i < m_size; i++){
+                    m_data_table[i].clear();
+                }
+
+                m_count =0;
+                m_size = 0;
+            }
+
+            /*!
+              @return True if the hash is empty, or false otherwhise
+              */
+
+            bool empty ( void ) const{
+                return m_count == 0;
+            }
+
+            /*! 
+              @return the amount element sored ind the table.
+             */
+
+            size_t size ( void ) const{
+                size_t size = 0;
+                for(auto i(0u); i < m_size; i++){
+                    for(auto it(m_data_table[i].begin(); it != m_data_table[i].end(); it++){
+                        it++;
+                    }
+                }
+
+                return size;
+            }
 
             DataType& at( const KeyType& k_ );
 
             DataType& operator[] ( const KeyType& k_ );
 
-            size_t count ( const KeyType& k_ ) const;
+            /*
+             @return the amount of elements that are in collision list associated with key k_
+             */
+
+            size_t count ( const KeyType& k_ ) const{
+                KeyHash hashFunc;
+
+                auto end(hashFunc(k_) % m_size);
+                size_t count = 0;
+                for(auto it(m_data_table[i].begin(); it != m_data_table[i].end(); it++)){
+                    count++;
+                }
+
+                return count;
+            }
 
             friend std::ostream& operator<< ( std::ostream &, const HashTbl& );//stdostream
 
