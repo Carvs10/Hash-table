@@ -6,7 +6,7 @@
 
 //#include "gtest/gtest.h"        // gtest lib
 #include "../include/hash.h"   // header file for tested functions
-#include "../include/account.h"  // To get the account class
+//#include "../include/account.h"  // To get the account class
 
 int main(){
 

@@ -32,17 +32,6 @@ class HashTbl {
                         KeyType m_key;   //!< Stores the key for an entry.
                         DataType m_data; //!< Stores the data for an entry.
 
-
-                        /*bool Prime(int number){
-                            
-                            for(int i=2; i < number; i++){
-                                if(number % i == 0){
-                                    return false;
-                                }
-                            }
-                            return true;
-                        }*/
-
             };
 
             using Entry = HashEntry; /*< KeyType, DataType >*/ //! Alias
@@ -58,6 +47,8 @@ class HashTbl {
             {
                   m_size = next_prime( tbl_size_ ) ;
                   m_data_table.resize( next_prime( tbl_size_ ) );
+
+                  std::cout<< "Contructor 1\n";
             }
 
             virtual ~HashTbl (){
@@ -196,6 +187,17 @@ class HashTbl {
              *Change Hash table if load factor λ > 1.
              */
             //!< Method that brings the next prime <= at the number.
+            //!< Auxiliar method that return if the number is prime.
+            bool Prime(int number){
+                            
+                            for(int i=2; i < number; i++){
+                                if(number % i == 0){
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+
             size_t next_prime( size_t t_size )
             {
                   for( int i = 2; i <= sqrt( t_size ); i++){
@@ -206,7 +208,7 @@ class HashTbl {
                   return t_size;
             }
 
-            void rehash(){
+            /*void rehash(){
                 KeyHash hashFunc; // "Functor" for primary hash.
 
                 unsigned int m_aux_size;
@@ -233,7 +235,7 @@ class HashTbl {
                 m_size = m_aux_size;
                 delete [] m_data_table;
                 m_data_table = m_data_table_aux;
-            }                      
+            }*/                      
 
             unsigned int m_size;          //! Hash table size.
 
