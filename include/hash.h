@@ -32,6 +32,17 @@ class HashTbl {
                         KeyType m_key;   //!< Stores the key for an entry.
                         DataType m_data; //!< Stores the data for an entry.
 
+
+                        bool Prime(int number){
+                            
+                            for(int i=2; i < number; i++){
+                                if(number % i == 0){
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+
             }
 
             using Entry = HashEntry < KeyType, DataType >; //! Alias
@@ -43,7 +54,9 @@ class HashTbl {
                   m_data_table.resize( DEFAULT_SIZE );
             }
 
-            virtual ~HashTbl ();
+            virtual ~HashTbl (){
+                delete [] m_data_table;
+            }
 
             HashTbl ( const Hashtbl& ); //Hashtbl??
 
@@ -73,9 +86,41 @@ class HashTbl {
 
             friend std::ostream& operator<< ( std::ostream &, const HashTbl& );//stdostream
 
+    //=== Private data.
       private:
 
-            void rehash();                      //! Change Hash table if load factor λ > 1.
+            /*! 
+             *Change Hash table if load factor λ > 1.
+             */
+
+            void rehash(){
+                KeyHash hashFunc; // "Functor" for primary hash.
+
+                unsigned int m_aux_size;
+
+                for(auto i(m_size*2); i > 0; i++){
+                    if(Prime(i)){
+                        m_aux_size = i;
+                        break;
+                    }
+                }
+
+                std::foward_list< Entry > *m_data_table_aux = new std::foward_list <Entry>[m_aux_size];
+
+                for(auto i(0u); i < m_size; i++){
+                    auto it(m_data_table[i].begin());
+                    while(it != m_data_table[i].end()){
+                        auto end(hashFunc(it->m_key) % m_aux_size);
+                        Entry new_entry(it->m_key, it->m_data);
+                        m_data_table[end].push_front(new_entry);
+                        it++;
+                    }
+                }
+
+                m_size = m_aux_size;
+                delete [] m_data_table;
+                m_data_table = m_data_table_aux;
+            }                      
 
             unsigned int m_size;          //! Hash table size.
 
