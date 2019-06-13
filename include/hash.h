@@ -178,14 +178,22 @@ class HashTbl {
                 return count;
             }
             */
-            //friend std::ostream& operator<< ( std::ostream &, const HashTbl& );//stdostream*/
+            friend std::ostream& operator<< ( std::ostream & os, const HashTbl <KeyType, DataType, KeyHash, KeyEqual> & hashtbl ){
+                for(auto i(0u); i < hashtbl.m_size; i++){
+                    os << "[" << i "]";
+                    for(auto it = hashtbl.m_data_table[i].begin(); it != hashtbl.m_data_table[i].end(); it++){
+                        os << "-> " << it->m_data;
+                    }
+                    os <<std::endl;
+                }
+
+                return os;
+            }
 
     //=== Private data.
       private:
 
-            /*! 
-             *Change Hash table if load factor λ > 1.
-             */
+            
             //!< Method that brings the next prime <= at the number.
             //!< Auxiliar method that return if the number is prime.
             bool Prime(int number){
@@ -208,7 +216,11 @@ class HashTbl {
                   return t_size;
             }
 
-            /*void rehash(){
+            /*! 
+             *Change Hash table if load factor λ > 1.
+             */
+
+            void rehash(){
                 KeyHash hashFunc; // "Functor" for primary hash.
 
                 unsigned int m_aux_size;
@@ -220,7 +232,7 @@ class HashTbl {
                     }
                 }
 
-                std::forward_list< Entry > *m_data_table_aux = new std::foward_list <Entry>[m_aux_size];
+                std::vector<std::forward_list< Entry > >*m_data_table_aux = new std::vector <foward_list <Entry>>[m_aux_size];
 
                 for(auto i(0u); i < m_size; i++){
                     auto it(m_data_table[i].begin());
@@ -235,7 +247,7 @@ class HashTbl {
                 m_size = m_aux_size;
                 delete [] m_data_table;
                 m_data_table = m_data_table_aux;
-            }*/                      
+            }                      
 
             unsigned int m_size;          //! Hash table size.
 
