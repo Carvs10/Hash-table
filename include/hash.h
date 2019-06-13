@@ -71,9 +71,39 @@ class HashTbl {
 
             HashTbl& operator= ( std::initializer_list < Entry > ilist );
 
-            bool insert ( const KeyType & k_, const DataType & d_ );
+            /*
+             *Insert an element present in Data d_, associating it with key k_
+             @return True if insertion was succeed, False otherwise.
+             */
+            bool insert ( const KeyType & k_, const DataType & d_ ){
+                KeyHash hashFunc;  // "Functor" for primary hash.
+                KeyEqual equalFunc; //
+                Entry new_entry(k_, d_);
+                auto end(hashFunc(k_) % m_size);
 
-            bool erase ( const KeyType & k_ );
+            }
+
+            /*
+             * Removes an element identified for key k_
+             @return True if the key was found, False otherwise.
+             */
+
+            bool erase ( const KeyType & k_ ){
+                KeyHash hashFunc;
+                KeyEqual equalFunc;
+                auto end(hashFunc(k_) % m_size);
+                if(m_data_table[end].empty()) return false;
+                auto aux(m_data_table[end].before_begin());
+                for(auto it(m_data_table[end].before_begin()); it != m_data_table[end].end(); it++){
+                    if(true == equalFunc(it->m_key, k_)){
+                        m_count -= 1;
+                        m_data_table[end].erase_after(aux);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
 
             bool retrieve ( const KeyType & k_, DataType & d_ ) const;
 
