@@ -38,7 +38,10 @@ class HashTbl {
 
             //!<Contructors and destructor
 
-            HashTbl ( size_t tbl_size = DEFAULT_SIZE );
+            HashTbl ( size_t tbl_size = DEFAULT_SIZE ): m_size { tbl_size }, m_count { 0 }
+            {
+                  m_data_table.resize( DEFAULT_SIZE );
+            }
 
             virtual ~HashTbl ();
 
