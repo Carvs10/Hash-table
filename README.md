@@ -9,7 +9,7 @@ TAD Hashtable programmed in C++
 
 **[3. Compiling](#3-compiling)**
 
-**[4. Documentation](#4-documentation)**
+**[4. Running the Tests](#4-running-the-tests)**
 
 **[5. Authorship](#5-authorship)**
 
@@ -32,23 +32,15 @@ To compile this project, you need to:
 
 `open the directory containing the folder Hash-table`
 
+`mkdir build`
+
+`cmake -G "Unix Makefiles" ..`
+
 `make`
 
-`./bin/exe`
+## 4. Running the Tests
 
-## 4. Documentation
-
-To access Doxygen documentation, you must go to:
-
-`folder Hash-table`
-
-`Hash-table/docs/html`
-
-search for archive:
-
-`index.html`
-
-and there you have it!
+` ./run_tests`
 
 ## 5. Authorship
 

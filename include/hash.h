@@ -21,8 +21,8 @@ class HashTbl {
 
       public:
 
-            //template < class KeyType, class DataType >
-            class HashEntry {//! Hash entry class
+            template < class KeyType, class DataType >
+            class HashEntry {  //! Hash entry class
 
                   public:
 
@@ -34,14 +34,9 @@ class HashTbl {
 
             };
 
-            using Entry = HashEntry; /*< KeyType, DataType >*/ //! Alias
+            using Entry = HashEntry; < KeyType, DataType >*/ //! Alias
 
             //!<Contructors and destructor
-
-            //HashTbl ( void ): m_size { DEFAULT_SIZE }, m_count { 0 }
-            //{
-             //     m_data_table.resize( DEFAULT_SIZE );
-            //}
 
             HashTbl ( size_t tbl_size_ = DEFAULT_SIZE ): m_count { 0 }
             {
@@ -51,23 +46,79 @@ class HashTbl {
                 std::cout<< "Contructor 1\n";
             }
 
-            //virtual ~HashTbl (){
-            //    delete [] m_data_table;
-            //}
+            virtual ~HashTbl (){
+                delete [] m_data_table;
+            }
 
-            //HashTbl ( const Hashtbl& ): 
+            //Copy constructor 
+            HashTbl ( const Hashtbl &other){
+                m_data_table = new std::forward_list< Entry >[other.m_size];
+                m_size = other.m_size;
+                for(auto i(0u); i < m_size; i++){
+                    if(other.m_data_table[i].empty() == false){
+                        for(auto it(other.m_data_table[i].begin()); it != other.m_data_table[i].end(); it++){
+                            Entry new_entry(it->m_key, it->m_data);
+                            m_data_table[i].push_front(new_entry);
+                        }
+                    }
+                }
+                m_count = other.m_count;
+            } 
 
-            /*HashTbl ( std::initializer_list < Entry > ilist );
+            /// Cosntructs the table with elements in the ilist
+            HashTbl ( std::initializer_list < Entry > ilist ){
+                m_data_table = new std::vector<forward_list< Entry > >[ilist.size()];
+                KeyHash hashFunc;
+                m_size = ilist.size();
 
-            HashTbl& operator= ( const Hashtbl & );
+                for(auto i(0u); i < ilist.size(); i++){
+                    auto end(hashFunc((ilist.begin()+i)->m_key) % m_size);
+                    m_data_table[end].push_front(*(ilist.begin()+i));
+                }
+                m_count = ilist.size();
+            }
 
-            HashTbl& operator= ( std::initializer_list < Entry > ilist );
-            */
+            /// copy assignment operator.
+            HashTbl& operator= ( const Hashtbl &other ){
+                clear();
+
+                m_size = other.m_size;
+
+                for(auto i(0u); i < m_size; i++){
+                    if(other.m_data_table[i].empty() == false){
+                        for(auto it(other.m_data_table[i].begin()); it != other.m_data_table[i].end(); it++){
+                            Entry new_entry(it->m_key, it->m_data);
+                            m_data_table[i].push_front(new_entry);
+                        }
+                    }
+                }
+
+                m_count = other.m_count;
+                return *this;
+            }
+
+            ///replace the content with the initializer list ilist
+            HashTbl& operator= ( std::initializer_list < Entry > ilist ){
+                clear();
+                KeyHash hashFunc;
+                m_size = DEFAULT_SIZE;
+
+                for(auto i(0u); i < ilist.size(); i++){
+                    auto end(hashFunc((ilist.begin()+i)->m_key) % m_size);
+                    m_data_table[end].push_front(*(ilist.begin()+i));
+
+                }
+
+                m_count = ilist.size();
+                return *this;
+
+            }
+            
             /*
              *Insert an element present in Data d_, associating it with key k_
              @return True if insertion was succeed, False otherwise.
              */
-            /*
+            
             bool insert ( const KeyType & k_, const DataType & d_ ){
                 KeyHash hashFunc;  // "Functor" for primary hash.
                 KeyEqual equalFunc; // "Functor" for equality
@@ -90,7 +141,7 @@ class HashTbl {
 
 
             }
-            */
+            
             /*
              * Removes an element identified for key k_
              @return True if the key was found, False otherwise.
