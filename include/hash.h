@@ -95,7 +95,7 @@ class HashTbl {
              * Removes an element identified for key k_
              @return True if the key was found, False otherwise.
              */
-            /*
+            
             bool erase ( const KeyType & k_ ){
                 KeyHash hashFunc;
                 KeyEqual equalFunc;
@@ -112,7 +112,11 @@ class HashTbl {
 
                 return false;
             }
-
+            /*!
+             * Recovers in d_ the informations associated with key k_,
+             * used as an argument
+             @return True if key was found.
+             */
             bool retrieve ( const KeyType & k_, DataType & d_ ) const{
                 KeyHash hashFunc;
                 KeyEqual equalFunc;
@@ -126,12 +130,12 @@ class HashTbl {
 
                 return false;
             }
-            */
+            
             /*!
              * Clear all the memory associated with collision lists from the table.
              * remove its elements
              */
-            /*
+            
             void clear ( void ){
 
                 for(auto i(0u); i < m_size; i++){
@@ -141,14 +145,14 @@ class HashTbl {
                 m_count = 0;
                 m_size = 0;
             }
-            */
+            
             /*!
               @return True if the hash is empty, or false otherwhise
               */
 
-            //bool empty ( void ) const{
-            //    return m_count == 0;
-            //}
+            bool empty ( void ) const{
+                return m_count == 0;
+            }
 
             /*! 
               @return the amount element sored ind the table.
@@ -158,14 +162,48 @@ class HashTbl {
                 return m_count;
             }
 
-           // DataType& at( const KeyType& k_ );
+            /*!
+             @return a reference to the data associated with key k_.
+             */
 
-            //DataType& operator[] ( const KeyType& k_ );
+           DataType& at( const KeyType& k_ ){
+               KeyHash hashFunc;
+               KeyEqual equalFunc;
+               auto end(hashFunc(k_) % m_size);
+               for(auto it(m_data_table[end].begin()); it != m_data_table[end].end(); it++){
+                   if(true == equalFunc(it->m_key, k_)){
+                        return it->m_data;
+                    }
+               }
+
+               throw std::out_of_range(" Invalid Hashtbl::at");
+           }
+
+           /*!
+            * Return a reference to the data associated to key k_, if exists;
+            *Otherwhise, insert and returns reference to  the data inserted.
+            */
+
+            DataType& operator[] ( const KeyType& k_ ){
+                KeyHash hashFunc;
+                KeyEqual equalFunc;
+                auto end(hashFunc(k_) % m_size);
+                for(auto it(m_data_table[end].begin()); it != m_data_table[end].end(); it++){
+                    if(true == equalFunc(it->m_key, k_)){
+                        return it->m_data;
+                    }
+                }
+
+                DataType x = DataType();
+                Entry new_entry(k_, x);
+                m_data_table[end].push_front(new_entry);
+                return m_data_table[end].front().m_data;
+            }
 
             /*
              @return the amount of elements that are in collision list associated with key k_
              */
-            /*
+            
             size_t count ( const KeyType& k_ ) const{
                 KeyHash hashFunc;
 
@@ -177,7 +215,7 @@ class HashTbl {
 
                 return count;
             }
-            */
+            
             friend std::ostream& operator<< ( std::ostream & os, const HashTbl <KeyType, DataType, KeyHash, KeyEqual> & hashtbl ){
                 for(auto i(0u); i < hashtbl.m_size; i++){
                     os << "[" << i "]";
